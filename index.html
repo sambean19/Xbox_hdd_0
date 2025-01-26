@@ -31,18 +31,8 @@
             color: #555;
             transition: opacity 0.5s ease;
         }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4caf50;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
+        .hidden {
+            display: none;
         }
         .progress-container {
             margin: 20px auto;
@@ -69,15 +59,36 @@
             font-size: 20px;
             font-weight: bold;
         }
-        .hidden {
-            display: none;
+        #completion-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        #completion-message.visible {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Xbox_hdd_0</h1>
-        <p><strong>Version:</strong> Xbox Series S</p>
+        <p><strong>Version:</strong> Xbox Series X</p>
         <p><strong>Status:</strong> Online</p>
         <div id="steps-container">
             <!-- Steps will appear dynamically here -->
@@ -87,6 +98,11 @@
             <div class="progress-text" id="progress-text">0%</div>
         </div>
         <button id="start-btn">Jailbreak</button>
+    </div>
+
+    <div id="completion-message">
+        <p>Jailbreak Complete</p>
+        <p>Please close the browser manually.</p>
     </div>
 
     <script>
@@ -118,6 +134,7 @@
         const progressContainer = document.getElementById("progress-container");
         const progressCircle = document.getElementById("progress-circle");
         const progressText = document.getElementById("progress-text");
+        const completionMessage = document.getElementById("completion-message");
 
         const displaySimulation = () => {
             startBtn.classList.add("hidden");
@@ -128,22 +145,19 @@
 
             const interval = setInterval(() => {
                 if (index < steps.length) {
-                    // Display current step
                     const stepDiv = document.createElement("div");
                     stepDiv.className = "step";
                     stepDiv.textContent = steps[index];
                     stepsContainer.appendChild(stepDiv);
 
-                    // Update progress
                     progress = Math.min(((index + 1) / steps.length) * 100, 100);
                     progressCircle.style.setProperty("--progress", `${progress * 3.6}deg`);
                     progressText.textContent = `${Math.round(progress)}%`;
 
-                    // Remove the line after 1 second
                     setTimeout(() => {
-                        stepDiv.style.opacity = 0; // Fade out effect
+                        stepDiv.style.opacity = 0;
                         setTimeout(() => {
-                            stepDiv.remove(); // Remove the element entirely
+                            stepDiv.remove();
                         }, 1000);
                     }, 3000);
 
@@ -151,11 +165,11 @@
                 } else {
                     clearInterval(interval);
                     setTimeout(() => {
-                        alert("Simulation Complete. Closing browser...");
-                        window.close(); // May not work depending on browser settings
-                    }, 2000);
+                        // Show the completion message
+                        completionMessage.classList.add("visible");
+                    }, 1000);
                 }
-            }, 3000); // 1.5 seconds per step to allow fade out
+            }, 3000);
         };
 
         startBtn.addEventListener("click", displaySimulation);

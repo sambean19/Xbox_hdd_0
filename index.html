@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xbox_hdd_0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .step {
+            margin: 5px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            color: #555;
+            transition: opacity 0.5s ease;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .progress-container {
+            margin: 20px auto;
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+        .progress-circle {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border-radius: 50%;
+            background: conic-gradient(
+                #4caf50 var(--progress),
+                #ccc var(--progress)
+            );
+            --progress: 0deg;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Xbox_hdd_0</h1>
+        <p><strong>Version:</strong> Xbox Series S</p>
+        <p><strong>Status:</strong> Online</p>
+        <div id="steps-container">
+            <!-- Steps will appear dynamically here -->
+        </div>
+        <div class="progress-container hidden" id="progress-container">
+            <div class="progress-circle" id="progress-circle"></div>
+            <div class="progress-text" id="progress-text">0%</div>
+        </div>
+        <button id="start-btn">Jailbreak</button>
+    </div>
+
+    <script>
+        const steps = [
+            "Initializing environment...",
+            "Q:\\Users\\UserMgr0\\AppData\\Local\\Packages\\27878ConstantineTarasenko.458004FD2C47C_c8b3w9r5va522\\LocalState\\",
+            "payload_server_win_x64.exe --stage2 stage2.bin --run run.exe",
+            "nc64.exe -lvnp 7070",
+            "post_exploit",
+            "Side loading support enabled",
+            "Unsigned non-UWP process launching",
+            "listening on [any] 7070 ...",
+            "connect to [192.168.0.61] from (UNKNOWN) [192.168.0.130] 49665",
+            "Build number: 25398.4478",
+            "Attempting to find kernel base...",
+            "Found likely kernel base: FFFFF80AF9800000",
+            "Attempting exploit...",
+            "Exploit succeeded! Running payload!",
+            "Connecting to Xbox Dev Server...",
+            "Downloading configuration files...",
+            "Loading system firmware...",
+            "Verifying system components...",
+            "Injecting payload...",
+            "Process complete. Rebooting system..."
+        ];
+
+        const stepsContainer = document.getElementById("steps-container");
+        const startBtn = document.getElementById("start-btn");
+        const progressContainer = document.getElementById("progress-container");
+        const progressCircle = document.getElementById("progress-circle");
+        const progressText = document.getElementById("progress-text");
+
+        const displaySimulation = () => {
+            startBtn.classList.add("hidden");
+            progressContainer.classList.remove("hidden");
+
+            let index = 0;
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                if (index < steps.length) {
+                    // Display current step
+                    const stepDiv = document.createElement("div");
+                    stepDiv.className = "step";
+                    stepDiv.textContent = steps[index];
+                    stepsContainer.appendChild(stepDiv);
+
+                    // Update progress
+                    progress = Math.min(((index + 1) / steps.length) * 100, 100);
+                    progressCircle.style.setProperty("--progress", `${progress * 3.6}deg`);
+                    progressText.textContent = `${Math.round(progress)}%`;
+
+                    // Remove the line after 1 second
+                    setTimeout(() => {
+                        stepDiv.style.opacity = 0; // Fade out effect
+                        setTimeout(() => {
+                            stepDiv.remove(); // Remove the element entirely
+                        }, 1000);
+                    }, 3000);
+
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        alert("Simulation Complete. Closing browser...");
+                        window.close(); // May not work depending on browser settings
+                    }, 2000);
+                }
+            }, 3000); // 1.5 seconds per step to allow fade out
+        };
+
+        startBtn.addEventListener("click", displaySimulation);
+    </script>
+</body>
+</html>
